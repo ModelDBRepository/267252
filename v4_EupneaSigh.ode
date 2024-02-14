@@ -1,0 +1,74 @@
+# Eupnea system w/ ca subsystem
+#
+#
+#
+# parameters
+parameter w=1
+parameter thetaa=0.0,ka=2,taua=0.15
+parameter thetas=2.4,ks=-0.8,taus=0.75
+parameter thetatheta=2.5,ktheta=2
+parameter tauthetama=6,tauthetami=0.15,thetatauth=3,ktautheta=-5
+parameter amin=1,lambdaa=10,lambdac=15
+parameter v1=20,v2=0.25,v3=60,k3=0.3,n3=2
+parameter lambda=0.15,thetam=0.25,km=0.04,thetah=0.3,kh=-0.06
+parameter jin0=0.009,jin1=0.0008
+parameter v4=0.4,k4=0.3,n4=4,thetac=0.35,kc=0.05
+#
+#
+# equations
+drive=(w*s*a)-theta
+xinf(x,theta,k)=1/(1+exp(4*(theta-x)/k))
+tautheta(x)=((tauthetama-tauthetami)/(1+exp(4*(thetatauth-x)/ktautheta)))+tauthetami
+#calcium across membrane
+jpm(a,c)=jin0+jin1*a-((v4*(c^4))/((k4^4)+(c^4)))
+finf(c)= (1/(1+exp((thetam-c)/km)))*(1/(1+exp((thetah-c)/kh)))
+cer(c,ct)=(ct-c)/lambda
+#
+#
+#
+#
+# ODEs
+da/dt=((amin+(lambdaa-amin)*xinf(drive,thetaa,ka)+lambdac*xinf(c,thetac,kc))-a)/taua
+ds/dt=(xinf(a,thetas,ks)-s)/taus
+dtheta/dt=(lambdaa*xinf(a,thetatheta,ktheta)-theta)/tautheta(a)
+dc/dt=(v1*finf(c)+v2)*(cer(c,ct)-c)-((v3*(c^2))/((k3^2)+(c^2)))+jpm(a,c)
+dct/dt=jpm(a,c)
+#
+#
+#
+# initial conditions
+a(0)=0.5
+s(0)=1
+theta(0)=0
+c(0)=0.075
+ct(0)=0.75
+#
+#
+#
+# xpp options
+# graph option 1 - time series of activity & c & ct
+@ total=500, nplot=3, yp=a, xp=t, yp2=ct, yp=c
+@ xhi=500, xlo=-0.1, yhi=15, ylo=-1
+@ dt=0.005
+#
+#
+# graph option 2 - ca nulc lines
+#@ total=50, nplot=1, yp=ct, xp=c
+#@ xhi=0.5, xlo=0, yhi=2, ylo=-0.1
+#
+#
+#
+#
+#
+done
+
+
+
+
+
+
+
+
+
+
+
