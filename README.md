@@ -1,4 +1,4 @@
-Code of the eupnea-sigh model for Borrus et al., 2021
+Code of the eupnea-sigh model for Borrus et al., 2024
 
 ---
 
